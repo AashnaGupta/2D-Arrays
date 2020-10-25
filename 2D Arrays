@@ -1,0 +1,270 @@
+package com.company;
+
+public class Main {
+
+    public static void main(String[] args) {
+        int[] a = {4, 2, 1, 3}; // 1d array
+        //System.out.println(arrayToString(a));
+        //System.out.println(min(a));
+
+        int[][] b = new int[3][3];//tic tac toe array
+        b[0][0] = -1;
+        b[0][1] = 1;
+        b[0][2] = 1;
+        b[1][0] = -1;
+        b[1][1] = 1;
+        b[1][2] = -1;
+        b[2][0] = -1;
+        b[2][1] = -1;
+        b[2][2] = 1;
+        //System.out.println(arrayToString(b));
+        //System.out.println(TicTacToe(b));
+
+        int[][] d = new int[3][3]; //3*3 array
+        d[0][0] = 1;
+        d[0][1] = 2;
+        d[0][2] = 3;
+        d[1][0] = 4;
+        d[1][1] = 5;
+        d[1][2] = 6;
+        d[2][0] = 7;
+        d[2][1] = 8;
+        d[2][2] = 9;
+        System.out.println(arrayToString(d));
+        //System.out.println(major(d));
+        //System.out.println(minor(d));
+        //System.out.println(arrayToString(expand(d)));
+        //System.out.println(arrayToString(rotate(d)));
+
+
+        int[][] e = new int[4][]; //jagged array
+        for (int r = 0; r < e.length; r++) {
+            e[r] = new int[r + 1];
+            for (int c = 0; c < e[r].length; c++)
+                e[r][c] = 1 + c;
+        }
+        //System.out.println(arrayToString(e));
+        //System.out.println(totalSum(e));
+        //System.out.println(min(e));
+        //System.out.println(min2(e));
+
+        //patterns();
+        //pascalsTriangle();
+    }
+
+    public static String arrayToString(int[] a) {
+        if (a == null)
+            return "null";
+        String rv = "";
+        for (int i = 0; i < a.length; i++) {
+            rv += a[i];
+            if (i != a.length - 1)
+                rv += ",";
+        }
+        return "{" + rv + "}";
+    }
+
+    public static String arrayToString(int[][] a) {
+        if (a == null)
+            return "null";
+        String rv = "";
+        for (int i = 0; i < a.length; i++) {
+            if (i == 0)
+                rv += arrayToString(a[i]);
+            else
+                rv += ",\n" + arrayToString(a[i]);
+        }
+        return "{" + rv + "}";
+    }
+
+    public static String TicTacToe(int[][] b) {
+        String rv = "tie";
+        int s1 = b[0][0];
+        int s2 = b[0][1];
+        int s3 = b[0][2];
+        int s4 = b[1][0];
+        int s5 = b[1][1];
+        int s6 = b[1][2];
+        int s7 = b[2][0];
+        int s8 = b[2][1];
+        int s9 = b[2][2];
+
+        if ((s1 + s2 + s3) == 3 || (s4 + s5 + s6) == 3 || (s7 + s8 + s9) == 3 || //rows
+                (s1 + s4 + s7) == 3 || (s2 + s5 + s8) == 3 || (s3 + s6 + s9) == 3 || //columns
+                (s1 + s5 + s9) == 3 || (s3 + s5 + s7) == 3) // diagonals
+            rv = "x wins";//x wins
+        else if ((s1 + s2 + s3) == -3 || (s4 + s5 + s6) == -3 || (s7 + s8 + s9) == -3 || //rows
+                (s1 + s4 + s7) == -3 || (s2 + s5 + s8) == -3 || (s3 + s6 + s9) == -3 || //columns
+                (s1 + s5 + s9) == -3 || (s3 + s5 + s7) == -3) // diagonals
+            rv = "o wins";//x wins
+
+        return rv;
+    }
+
+    public static int totalSum(int[][] e) {
+        int rv = 0;
+        for (int r = 0; r < e.length; r++){
+            for (int c = 0; c < e[r].length; c++)
+                if (e[r][c] == 0)
+                    return rv;
+        }
+        for (int r = 0; r < e.length; r++) {
+            for (int c = 0; c < e[r].length; c++)
+                rv = rv + e[r][c];
+        }
+        return rv;
+    }
+
+    public static int major(int[][] d) {
+        int rv = 0;
+        for (int r = 0; r < d.length; r++) {
+            rv = rv + d[r][r];
+        }
+        return rv;
+    }
+
+    public static int minor(int[][] d) {
+        int rv = 0;
+        int c = d.length - 1;
+        for (int r = 0; r < d.length; r++) {
+            rv = rv + d[r][c];
+            c--;
+        }
+        return rv;
+    }
+
+    public static int min(int[] a) {
+        if (a == null)
+            return 0;
+        int storage = 0;
+        for (int i = 0; i < a.length - 1; i++) {
+            for (int j = 0; j < a.length - 1 - i; j++) {
+                if (a[j] > a[j + 1]) {
+                    storage = a[j];
+                    a[j] = a[j + 1];
+                    a[j + 1] = storage;
+                }
+            }
+        }
+        return a[0];
+    }
+
+    public static int min(int[][] d) {
+        int rv = 0;
+        for (int r = 0; r < d.length; r++){
+            for (int c = 0; c < d[r].length; c++)
+                if (d[r][c] == 0)
+                    return rv;
+        }
+        int[] compare = new int[d.length]; //creates array equivalent to the number of rows in 2d
+        for (int r = 0; r < d.length; r++) { //traverses through the rows
+            int[] row = new int[d[r].length]; // new array of the length of the row being traversed
+            for (int i = 0; i < d[r].length; i++) { //have to pass that array to task 7
+                row[i] = d[r][i]; // should copy the 1d row into this new 1d array
+            }
+            compare[r] = min(row);
+        }
+        return min(compare);
+    }
+
+    public static int min2(int[][] d) {
+        int rv = 0;
+        for (int r = 0; r < d.length; r++){ // null check
+            for (int c = 0; c < d[r].length; c++)
+                if (d[r][c] == 0)
+                    return rv;
+        }
+        int[] allMin = new int[d.length];
+        for (int r = 0; r < d.length; r++) { //traverses through the rows
+            int min = d[r][0];
+            for (int c = 0; c < d[r].length - 1; c++) { //traverses columns in that row
+                if (min > d[r][c + 1])
+                    min = d[r][c + 1];
+            }
+            allMin[r] = min;
+        }
+        int min = allMin[0];
+        for (int i = 0; i < allMin.length - 1; i++) {
+            if (min > allMin[i + 1])
+                min = allMin[i + 1];
+        }
+        return min;
+    }
+
+    public static int[][] rotate(int[][] d) {
+        int storage;
+        for (int r = 0; r < d.length; r++) { //traverses the rows
+            for (int c = 0; c < r; c++) { //traverses columns starting from first column until the diagonal
+                // avoids switching the numbers twice and and avoids switching the middle numbers
+                storage = d[r][c];//uses swap method to swap numbers that are in a row into a column
+                d[r][c] = d[c][r];//ex: 1st row becomes 1st column, 2nd row becomes 2nd column, etc
+                d[c][r] = storage;
+            }
+        }
+        for (int r = 0; r < d.length; r++) { //traverses the rows
+            for (int c = 0; c < d.length / 2; c++) { //traverses columns in the first half of the array
+                // switches the columns with the second half of the array
+                storage = d[r][c];//uses swap method
+                d[r][c] = d[r][d.length - c - 1];//swaps column that are equidistant from the middle
+                d[r][d.length - c - 1] = storage;
+            }
+        }
+        return d;
+    }
+
+    public static int[][] expand(int[][] a) {
+        int[][] rv = new int[(2 * a.length)][]; //creates a new array with twice as many spaces as the input array
+        for (int r = 0; r < a.length; r++) {//create twice as many rows and columns
+            rv[2 * r] = new int[a[r].length * 2];
+            rv[2 * r + 1] = new int[a[r].length * 2];
+            for (int c = 0; c < a[r].length; c++) {//put the 4 values into the array at the correct indices
+                rv[2 * r][2 * c] = a[r][c];//example: rv[0][0] //multiply by two so it places it in the next so it doesn't overlap
+                rv[2 * r][2 * c + 1] = a[r][c];//example:rv[0][1]
+                rv[2 * r + 1][2 * c] = a[r][c];//example:rv[1][0]
+                rv[2 * r + 1][2 * c + 1] = a[r][c];//example:rv[1][1]
+            }
+        }
+        return rv;
+    }
+
+    public static void patterns() {
+        int[][] a = new int[5][];
+        for (int r = 0; r < a.length; r++) {
+            a[r] = new int[r + 1];
+            for (int c = 0; c < a[r].length; c++)
+                a[r][c] = c + 1;
+        }
+        System.out.println(arrayToString(a));
+        System.out.println("");
+
+        int[][] b = new int[5][];
+        for (int r = 0; r < b.length; r++) {
+            b[r] = new int[-r + b.length];
+            for (int c = 0; c < b[r].length; c++)
+                b[r][c] = b.length - r - c;
+        }
+        System.out.println(arrayToString(b));
+        System.out.println("");
+
+        int[][] d = new int[5][];
+        for (int r = 0; r < d.length; r++) {
+            d[r] = new int[r + 1];
+            for (int c = 0; c < d[r].length; c++)
+                d[r][c] = d.length - r;
+        }
+        System.out.println(arrayToString(d));
+    }
+
+    public static void pascalsTriangle() {
+        int[][] a = new int[10][]; //jagged array
+        for (int r = 0; r < a.length; r++) {
+            a[r] = new int[r + 1];
+            for (int c = 0; c < a[r].length; c++)
+                if (c == 0 || c == a[r].length - 1) //fills in the ones in the diagonal
+                    a[r][c] = 1;
+                else
+                    a[r][c] = (a[r - 1][c - 1]) + (a[r - 1][c]);
+        }
+        System.out.println(arrayToString(a));
+    }
+}
